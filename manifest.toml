@@ -53,6 +53,7 @@ ram.runtime = "500M"
 
     [resources.system_user]
 	allow_email = true
+    mail_user = "no-reply"
     
     [resources.install_dir]
 
