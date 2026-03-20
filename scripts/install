@@ -39,20 +39,18 @@ ynh_config_add --template=".env" --destination="$install_dir/.env"
 #=================================================
 # INSTALLATION
 #=================================================
+ynh_script_progression "Adding $app's dependencies..."
 
 pushd "$install_dir"
 	ynh_hide_warnings corepack enable && COREPACK_ENABLE_DOWNLOAD_PROMPT=0 corepack prepare pnpm@latest --activate
 	ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=4096" pnpm install --frozen-lockfile
-	#ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=4096" env NX_DAEMON=false NX_WORKER_COUNT=1 NX_NATIVE=false CI=true pnpm run build
-	#ynh_exec_as_app pnpm run build
-	ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=4096" NX_DAEMON=false pnpm run editor-ext:build
-	ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=4096" NX_DAEMON=false pnpm run server:build
-	ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=4096" NX_DAEMON=false pnpm run client:build
-	ynh_exec_as_app pnpm store prune
+
+ynh_script_progression "Building $app..."
+    ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=4096" NX_DAEMON=false NX_DISABLE_NX_CACHE=true pnpm run editor-ext:build
+    ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=4096" NX_DAEMON=false NX_DISABLE_NX_CACHE=true pnpm run server:build
+    ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=4096" NX_DAEMON=false NX_DISABLE_NX_CACHE=true pnpm run client:build
 popd
 
-chown -R $app:$app $install_dir
-ln -s "$data_dir" "$install_dir/data"
 
 #=================================================
 # SYSTEM CONFIGURATION
@@ -66,6 +64,8 @@ ynh_config_add_systemd --service="$app"
 yunohost service add "$app" --description="Docmost" --log="/var/log/$app/$app.log"
 
 ynh_config_add_logrotate
+
+ln -s "$data_dir" "$install_dir/data"
 
 #=================================================
 # START SYSTEMD SERVICE
