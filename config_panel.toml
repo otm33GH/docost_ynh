@@ -5,11 +5,6 @@ name.en = "Configuration panel"
 name.fr = "Panneau de configuration"
 services = ["__APP__", "nginx"]
 
-
-[main.instance]
-name.en = "Global settings"
-name.fr = "Paramètres Globaux"
-
 [main.uploads]
 name.en = "Upload limit size"
 name.fr = "Téléchargement de fichiers"
