@@ -22,6 +22,9 @@ email_smtp_password="$mail_pwd"
 email_smtp_port=587
 storage_driver=$storage_driver
 
+mail_user="no-reply"
+ynh_app_setting_set --key="mail_user" --value="$mail_user"
+
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
