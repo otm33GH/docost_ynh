@@ -76,6 +76,7 @@ ln -s "$data_dir" "$install_dir/data"
 ynh_script_progression "Starting $app's systemd service..."
 
 ynh_systemctl --service="$app" --action="start"
+ynh_systemctl --service=postfix --action="restart"
 
 #=================================================
 # END OF SCRIPT
